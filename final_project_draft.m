@@ -1,6 +1,6 @@
 %% BURGER'S EQUATION
 x0 = 0;
-xf = 1000;
+xf = 500;
 t0 = 0;
 tf = 100;
 dx = 1;
@@ -17,16 +17,17 @@ for k = 1:nt-1
     for i = 2:nx-1
         s(i,k+1) = -C*(s(i,k)).^2 + s(i,k) * (1+C*s(i-1,k)-2*D)+D*(s(i+1,k)+s(i-1,k));
     end
-    s(1,k+1) = s(2,k+1);
-    s(end,k+1) = s(end-1,k+1);
+    s(1,k+1) = s(1,k)-C*s(end,k)*(s(end,k)-s(end-1,k))+D*(s(2,k)-2*s(end,k)+s(end-1,k));
+    s(end,k+1) = s(1,k);
 end
 plot(x,s(:,1:500:end));
 xlabel('X');
 ylabel('Height');
+title('Height at each point over time');
 
 %% Multiplication in source term
 x0 = 0;
-xf = 1000;
+xf = 500;
 t0 = 0;
 tf = 100;
 dx = 1;
@@ -44,12 +45,13 @@ for k = 1:nt-1
     for i = 2:nx-1
         s(i,k+1) = -C*(s(i,k)).^2 + s(i,k) * (1 + C*s(i-1,k)+2*D*(K(i)-1)) - D*(K(i)-1)*(s(i-1,k)+s(i+1,k));
     end
-    s(1,k+1) = s(2,k+1);
-    s(end,k+1) = s(end-1,k+1);
+    s(1,k+1) = s(1,k) - C*(s(end,k)).^2 + s(end,k) * (C*s(end-1,k)+2*D*(K(end)-1)) - D*(K(end)-1)*(s(end-1,k)+s(2,k));
+    s(end,k+1) = s(1,k);
 end
 plot(x,s(:,1:500:end));
 xlabel('X');
 ylabel('Height');
+title('Heighgt at each point over time');
 %% CONVOLUTION TERM
 x0 = 0;
 xf = 1000;
@@ -63,7 +65,7 @@ nx = (xf-x0)/dx;
 nt = (tf-t0)/dt;
 x = linspace(x0,xf,nx);
 t = linspace(t0,tf,nt);
-K = (x.^(-1/3))'; % I NEED TO DO THE REST OF THE SOLUTION LIKE NORMAL AND ADD A VECTOR FOR THE CONVOLUTION AT EACH STEP
+K = (x.^(-1/3))';
 s = zeros(nx,nt);
 s(:,1) = 5*exp(-(.005*x-2.5).^2);
 y1 = zeros(nx-2,1);
@@ -84,3 +86,4 @@ end
 plot(x,s(:,1:500:end));
 xlabel('X');
 ylabel('Height');
+title('Height at each point over time');
