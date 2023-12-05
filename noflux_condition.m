@@ -1,6 +1,6 @@
 %% BURGER'S EQUATION
 x0 = 0;
-xf = 500;
+xf = 1000;
 t0 = 0;
 tf = 100;
 dx = 1;
@@ -17,8 +17,8 @@ for k = 1:nt-1
     for i = 2:nx-1
         s(i,k+1) = -C*(s(i,k)).^2 + s(i,k) * (1+C*s(i-1,k)-2*D)+D*(s(i+1,k)+s(i-1,k));
     end
-    s(1,k+1) = s(1,k)-C*s(end,k)*(s(end,k)-s(end-1,k))+D*(s(2,k)-2*s(end,k)+s(end-1,k));
-    s(end,k+1) = s(1,k);
+    s(1,k+1) = s(2,k+1);
+    s(end,k+1) = s(end-1,k+1);
 end
 plot(x,s(:,1:500:end));
 xlabel('X');
@@ -27,7 +27,7 @@ title('Height at each point over time');
 
 %% Multiplication in source term
 x0 = 0;
-xf = 500;
+xf = 1000;
 t0 = 0;
 tf = 100;
 dx = 1;
